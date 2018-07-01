@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "howto_circle_from_points", "howto_circle_from_points\howto_circle_from_points.csproj", "{DA2A9CC9-8330-4A19-8F05-554A1F4ED850}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp1", "WindowsFormsApp1\WindowsFormsApp1.csproj", "{F42C0CF2-73EC-4022-A0C4-89A0C1A49800}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp2", "WindowsFormsApp2\WindowsFormsApp2.csproj", "{05F7EB3A-5511-4115-B981-299D79F9D2EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsOrbit", "WindowsFormsOrbit\WindowsFormsOrbit.csproj", "{D75D6A85-745E-4366-A726-73DCD21C57E7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DA2A9CC9-8330-4A19-8F05-554A1F4ED850}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA2A9CC9-8330-4A19-8F05-554A1F4ED850}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA2A9CC9-8330-4A19-8F05-554A1F4ED850}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA2A9CC9-8330-4A19-8F05-554A1F4ED850}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F42C0CF2-73EC-4022-A0C4-89A0C1A49800}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F42C0CF2-73EC-4022-A0C4-89A0C1A49800}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F42C0CF2-73EC-4022-A0C4-89A0C1A49800}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F42C0CF2-73EC-4022-A0C4-89A0C1A49800}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05F7EB3A-5511-4115-B981-299D79F9D2EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05F7EB3A-5511-4115-B981-299D79F9D2EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05F7EB3A-5511-4115-B981-299D79F9D2EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05F7EB3A-5511-4115-B981-299D79F9D2EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D75D6A85-745E-4366-A726-73DCD21C57E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D75D6A85-745E-4366-A726-73DCD21C57E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D75D6A85-745E-4366-A726-73DCD21C57E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D75D6A85-745E-4366-A726-73DCD21C57E7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C7F88123-A5B6-4AD0-ACC3-D227246C52DF}
+	EndGlobalSection
+EndGlobal
