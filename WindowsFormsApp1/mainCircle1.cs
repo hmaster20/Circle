@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -10,9 +11,9 @@ using System.Windows.Forms;
 
 namespace WindowsFormsApp1
 {
-    public partial class Form1 : Form
+    public partial class main : Form
     {
-        public Form1()
+        public main()
         {
             InitializeComponent();
         }
@@ -356,6 +357,76 @@ namespace WindowsFormsApp1
 
         }
 
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Graphics g = pictureBox1.CreateGraphics();
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            g.Clear(Control.DefaultBackColor);
 
+            Pen pen = new Pen(Brushes.Aquamarine, 3.0f);
+            RectangleF area = new RectangleF(30, 30, 500, 500);
+            g.DrawEllipse(pen, area);   // Главный круг
+
+
+            RectangleF circle = new RectangleF(0, 0, 5, 5);   // размеры внутреннего круга
+            PointF loc = PointF.Empty;
+            float radius = 250;
+            float angle = 0.0f;
+            PointF org = new PointF(250, 250);
+
+
+            int ang = 360 / 2;
+
+            for (int i = 0; i < 360;)
+            {
+                angle = i;
+                loc = calc.CirclePoint(radius, angle, org);
+
+                circle.X = loc.X - (circle.Width / 2) + area.X;
+                circle.Y = loc.Y - (circle.Height / 2) + area.Y;
+
+                g.DrawEllipse(new Pen(Brushes.Red, 3.0f), circle);
+
+                i = i + 30;
+            }
+
+
+            //PointF Center = calc.Center(area);
+            //SizeF size = new SizeF();
+            //size.Height = 100;
+            //size.Width = 100;
+            //size.Width = 100;
+
+
+            //PointF CenterCirc = calc.CirclePoint(100, 0, Center);
+            //    RectangleF inside = new RectangleF(Center.X,Center.Y, CenterCirc.X, CenterCirc.Y);
+            ////RectangleF inside = new RectangleF(Center, size);
+            ////RectangleF inside = new RectangleF(40, 40, 200, 200);
+            //g.DrawEllipse(pen, inside);
+
+        }
+    }
+
+
+
+    public static class calc
+    {
+        public static Point Center(this Rectangle rect)
+        {
+            return new Point(rect.Left + rect.Width / 2, rect.Top + rect.Height / 2);
+        }
+
+        public static PointF Center(this RectangleF rect)
+        {
+            return new PointF(rect.Left + rect.Width / 2, rect.Top + rect.Height / 2);
+        }
+
+
+        public static PointF CirclePoint(float radius, float angleInDegrees, PointF origin)
+        {
+            float x = (float)(radius * Math.Cos(angleInDegrees * Math.PI / 180f)) + origin.X;
+            float y = (float)(radius * Math.Sin(angleInDegrees * Math.PI / 180f)) + origin.Y;
+            return new PointF(x, y);
+        }
     }
 }

@@ -50,8 +50,6 @@ namespace WindowsFormsOrbit
             fG.Clear(Color.Black);
 
 
-
-
             while (drawing)
             {
                 g.Clear(Color.Black); // регулярная очистка создает эффект движения
