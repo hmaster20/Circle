@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp2", "Windows
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsOrbit", "WindowsFormsOrbit\WindowsFormsOrbit.csproj", "{D75D6A85-745E-4366-A726-73DCD21C57E7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "howto_text_on_circle", "howto_text_on_circle\howto_text_on_circle.csproj", "{67E80953-F2B7-4A6C-B723-4D4ED3001DCB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{D75D6A85-745E-4366-A726-73DCD21C57E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D75D6A85-745E-4366-A726-73DCD21C57E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D75D6A85-745E-4366-A726-73DCD21C57E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67E80953-F2B7-4A6C-B723-4D4ED3001DCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67E80953-F2B7-4A6C-B723-4D4ED3001DCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67E80953-F2B7-4A6C-B723-4D4ED3001DCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67E80953-F2B7-4A6C-B723-4D4ED3001DCB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

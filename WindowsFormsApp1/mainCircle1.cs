@@ -445,6 +445,67 @@ namespace WindowsFormsApp1
             //g.DrawEllipse(pen, inside);
 
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            int Diameter = 300;
+
+            Graphics g = pictureBox1.CreateGraphics();
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            g.Clear(Control.DefaultBackColor);
+
+            Pen pen = new Pen(Brushes.Aquamarine, 3.0f);
+            RectangleF area = new RectangleF(30, 30, Diameter, Diameter);
+            g.DrawEllipse(pen, area);   // Главный круг
+
+            RectangleF circle = new RectangleF(0, 0, 5, 5);   // размеры круга на орбите
+            PointF loc = PointF.Empty;
+            float radius = (Diameter / 2);
+            //float angle = 0.0f;
+            PointF org = new PointF(radius, radius);
+
+            // Внутренний круг
+            int PsevdoCircleDiameter = Diameter - 50;
+            RectangleF PsevdoCircle = new RectangleF(0, 0, PsevdoCircleDiameter, PsevdoCircleDiameter);
+            PsevdoCircle.X = calc.Center(area).X - (PsevdoCircle.Width / 2);
+            PsevdoCircle.Y = calc.Center(area).Y - (PsevdoCircle.Height / 2);
+            g.DrawEllipse(new Pen(Brushes.Brown, 2.0f), PsevdoCircle);
+
+            for (int angle = 0; angle < 360;)
+            {
+                loc = calc.CirclePoint(radius, angle, org);
+
+                //circle.X = loc.X - (circle.Width / 2) + area.X;
+                //circle.Y = loc.Y - (circle.Height / 2) + area.Y;
+                //g.DrawEllipse(new Pen(Brushes.Red, 3.0f), circle);
+
+                int miniRadius = (PsevdoCircleDiameter / 2);
+                PointF locMini = calc.CirclePoint(miniRadius, angle, new PointF(miniRadius, miniRadius));
+
+                // Точка на малой орбите
+                float miniX = locMini.X - (1 / 2) + PsevdoCircle.X;
+                float miniY = locMini.Y - (1 / 2) + PsevdoCircle.Y;
+                // Точка на БОЛЬШОЙ орбите
+                float maxX = loc.X - (1 / 2) + area.X;
+                float maxY = loc.Y - (1 / 2) + area.Y;
+
+                g.DrawLine(new Pen(Brushes.Blue, 2.0f), new PointF(miniX, miniY), new PointF(maxX, maxY));
+                
+
+                Font font = new Font(FontFamily.GenericSansSerif, 12.0F, FontStyle.Bold);
+                float x = ((loc.X - (1 / 2) + area.X) - (locMini.X - (1 / 2) + PsevdoCircle.X)) / 2 + (locMini.X - (1 / 2) + PsevdoCircle.X);
+                float y = ((loc.Y - (1 / 2) + area.Y) - (locMini.Y - (1 / 2) + PsevdoCircle.Y)) / 2 + (locMini.Y - (1 / 2) + PsevdoCircle.Y);
+
+                var P = new PointF(x, y);
+
+                g.DrawString("+", font, Brushes.Green, P);
+
+
+                angle = angle + 30;
+
+            }
+
+        }
     }
 
 
