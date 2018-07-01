@@ -359,20 +359,32 @@ namespace WindowsFormsApp1
 
         private void button4_Click(object sender, EventArgs e)
         {
+            int Diameter = 300;
+
             Graphics g = pictureBox1.CreateGraphics();
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             g.Clear(Control.DefaultBackColor);
 
             Pen pen = new Pen(Brushes.Aquamarine, 3.0f);
-            RectangleF area = new RectangleF(30, 30, 500, 500);
+            //RectangleF area = new RectangleF(30, 30, 500, 500);
+            RectangleF area = new RectangleF(30, 30, Diameter, Diameter);
             g.DrawEllipse(pen, area);   // Главный круг
 
 
-            RectangleF circle = new RectangleF(0, 0, 5, 5);   // размеры внутреннего круга
+            RectangleF circle = new RectangleF(0, 0, 5, 5);   // размеры круга на орбите
             PointF loc = PointF.Empty;
-            float radius = 250;
+            //float radius = 250;
+            float radius = (Diameter / 2);
             float angle = 0.0f;
-            PointF org = new PointF(250, 250);
+            //PointF org = new PointF(250, 250);
+            PointF org = new PointF(radius, radius);
+
+            // Внутренний круг
+            int PsevdoCircleDiameter = Diameter - 50;
+            RectangleF PsevdoCircle = new RectangleF(0, 0, PsevdoCircleDiameter, PsevdoCircleDiameter);
+            PsevdoCircle.X = calc.Center(area).X - (PsevdoCircle.Width / 2);
+            PsevdoCircle.Y = calc.Center(area).Y - (PsevdoCircle.Height / 2);
+            g.DrawEllipse(new Pen(Brushes.Brown, 2.0f), PsevdoCircle);
 
 
             int ang = 360 / 2;
@@ -385,7 +397,35 @@ namespace WindowsFormsApp1
                 circle.X = loc.X - (circle.Width / 2) + area.X;
                 circle.Y = loc.Y - (circle.Height / 2) + area.Y;
 
-                g.DrawEllipse(new Pen(Brushes.Red, 3.0f), circle);
+                //g.DrawEllipse(new Pen(Brushes.Red, 3.0f), circle);
+
+                // Часы
+                //g.DrawLine(new Pen(Brushes.Blue, 2.0f), calc.Center(area),
+                //    new PointF(
+                //        loc.X - (1 / 2) + area.X,
+                //        loc.Y - (1 / 2) + area.Y));
+
+                int miniRadius = (PsevdoCircleDiameter / 2);
+                PointF locMini = calc.CirclePoint(miniRadius, angle, new PointF(miniRadius, miniRadius));
+
+                //// Часы Mini
+                //g.DrawLine(new Pen(Brushes.Blue, 2.0f), calc.Center(area),
+                //    new PointF(
+                //        locMini.X - (1 / 2) + PsevdoCircle.X,
+                //        locMini.Y - (1 / 2) + PsevdoCircle.Y));
+
+
+                g.DrawLine(new Pen(Brushes.Blue, 2.0f),
+                    new PointF( // Точка на малой орбите
+                        locMini.X - (1 / 2) + PsevdoCircle.X,
+                        locMini.Y - (1 / 2) + PsevdoCircle.Y),
+                    new PointF( // Точка на БОЛЬШОЙ орбите
+                        loc.X - (1 / 2) + area.X,
+                        loc.Y - (1 / 2) + area.Y)
+                        );
+
+
+
 
                 i = i + 30;
             }
