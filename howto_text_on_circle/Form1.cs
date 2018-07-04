@@ -53,7 +53,7 @@ namespace howto_text_on_circle
                     //gr.DrawEllipse(Pens.Red, cx - radius - 5, cy - radius -5 , 2 * radius+ 10, 2 * radius+ 10);
                     gr.DrawEllipse(Pens.Blue, cx - radius - 29, cy - radius - 29, 2 * radius + 58, 2 * radius + 58);
                     // Draw the text.
-                    DrawTextOnCircle(gr, font, Brushes.Blue, radius, cx, cy,
+                    DrawTextOnCircle(gr, font, Brushes.Green, radius, cx, cy,
                        "Text on the Top of the Circle",
                         "Text on the Bottom of the Circle");
                 }
@@ -165,6 +165,7 @@ namespace howto_text_on_circle
         {
             List<RectangleF> results = new List<RectangleF>();
 
+            // Местоположение X для следующего символа.
             // The X location for the next character.
             float x = 0;
 
@@ -182,12 +183,14 @@ namespace howto_text_on_circle
                 // Measure the characters.
                 List<RectangleF> rects = MeasureCharactersInWord(gr, font, substring);
 
+                // Удалите ввод для первого символа.
                 // Remove lead-in for the first character.
                 if (start == 0) x += rects[0].Left;
 
                 // For debugging.
                 // Console.WriteLine(rects[0].Left);
 
+                // Сохраните все, кроме последнего прямоугольника.
                 // Save all but the last rectangle.
                 for (int i = 0; i < rects.Count + 1 - 1; i++)
                 {
@@ -224,9 +227,7 @@ namespace howto_text_on_circle
                 string_format.SetMeasurableCharacterRanges(ranges);
 
                 // Find the character ranges.
-                RectangleF rect = new RectangleF(0, 0, 10000, 100);
-                Region[] regions =
-                    gr.MeasureCharacterRanges(text, font, this.ClientRectangle, string_format);
+                Region[] regions = gr.MeasureCharacterRanges(text, font, this.ClientRectangle, string_format);
 
                 // Convert the regions into rectangles.
                 foreach (Region region in regions)
