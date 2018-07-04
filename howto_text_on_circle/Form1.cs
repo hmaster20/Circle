@@ -22,6 +22,7 @@ namespace howto_text_on_circle
         // Draw the text.
         private void Form1_Load(object sender, EventArgs e)
         {
+            // Получить параметры круга.
             // Get the circle's parameters.
             float font_height = 24;
             float radius = Math.Min(
@@ -30,10 +31,12 @@ namespace howto_text_on_circle
             float cx = picText.ClientSize.Width / 2;
             float cy = picText.ClientSize.Height / 2;
 
+            // Сделайте растровое изображение для хранения текста.
             // Make a Bitmap to hold the text.
             Bitmap bm = new Bitmap(
                 picText.ClientSize.Width,
                 picText.ClientSize.Height);
+
             using (Graphics gr = Graphics.FromImage(bm))
             {
                 gr.Clear(Color.White);
@@ -41,19 +44,17 @@ namespace howto_text_on_circle
                 // Don't use TextRenderingHint.AntiAliasGridFit.
                 gr.TextRenderingHint = TextRenderingHint.AntiAlias;
 
+                // Сделать шрифт для использования
                 // Make a font to use.
-                using (Font font = new Font("Times New Roman", font_height,
-                    FontStyle.Regular, GraphicsUnit.Pixel))
+                using (Font font = new Font("Times New Roman", font_height, FontStyle.Regular, GraphicsUnit.Pixel))
                 {
                     // Draw the circle.
-                    gr.DrawEllipse(Pens.Red,
-                        cx - radius, cy - radius,
-                        2 * radius, 2 * radius);
-
+                    gr.DrawEllipse(Pens.Red, cx - radius, cy - radius, 2 * radius, 2 * radius);
+                    //gr.DrawEllipse(Pens.Red, cx - radius - 5, cy - radius -5 , 2 * radius+ 10, 2 * radius+ 10);
+                    gr.DrawEllipse(Pens.Blue, cx - radius - 29, cy - radius - 29, 2 * radius + 58, 2 * radius + 58);
                     // Draw the text.
-                    DrawTextOnCircle(gr, font, Brushes.Blue,
-                        radius, cx, cy,
-                        "Text on the Top of the Circle",
+                    DrawTextOnCircle(gr, font, Brushes.Blue, radius, cx, cy,
+                       "Text on the Top of the Circle",
                         "Text on the Bottom of the Circle");
                 }
             }
@@ -62,23 +63,25 @@ namespace howto_text_on_circle
             picText.Image = bm;
         }
 
+        // Нарисуйте текст с центром сверху и снизу указанного круга.
         // Draw text centered on the top and bottom of the indicated circle.
-        private void DrawTextOnCircle(Graphics gr, Font font, Brush brush,
-            float radius, float cx, float cy, string top_text, string bottom_text)
+        private void DrawTextOnCircle(Graphics gr, Font font, Brush brush, float radius, float cx, float cy, string top_text, string bottom_text)
         {
-            // Use a StringFormat to draw the middle
-            // top of each character at (0, 0).
+            // Используйте StringFormat, чтобы нарисовать средний верх каждого символа в (0, 0).
+            // Use a StringFormat to draw the middle top of each character at (0, 0).
             using (StringFormat string_format = new StringFormat())
             {
                 string_format.Alignment = StringAlignment.Center;
                 string_format.LineAlignment = StringAlignment.Far;
 
+                // Используется для масштабирования от радианов до градусов.
                 // Used to scale from radians to degrees.
                 double radians_to_degrees = 180.0 / Math.PI;
 
                 // **********************
                 // * Draw the top text. *
                 // **********************
+                // Измерьте символы.
                 // Measure the characters.
                 List<RectangleF> rects = MeasureCharacters(gr, font, top_text);
 
@@ -86,6 +89,7 @@ namespace howto_text_on_circle
                 var width_query = from RectangleF rect in rects select rect.Width;
                 float text_width = width_query.Sum();
 
+                // Найдите начальный угол.
                 // Find the starting angle.
                 double width_to_angle = 1 / radius;
                 double start_angle = -Math.PI / 2 - text_width / 2 * width_to_angle;
@@ -94,18 +98,19 @@ namespace howto_text_on_circle
                 // Draw the characters.
                 for (int i = 0; i < top_text.Length; i++)
                 {
+                    // Смотрите, куда идет этот персонаж.
                     // See where this character goes.
                     theta += rects[i].Width / 2 * width_to_angle;
                     double x = cx + radius * Math.Cos(theta);
                     double y = cy + radius * Math.Sin(theta);
 
+                    // Преобразовать, чтобы расположить символ.
                     // Transform to position the character.
                     gr.RotateTransform((float)(radians_to_degrees * (theta + Math.PI / 2)));
                     gr.TranslateTransform((float)x, (float)y, MatrixOrder.Append);
 
                     // Draw the character.
-                    gr.DrawString(top_text[i].ToString(), font, brush,
-                        0, 0, string_format);
+                    gr.DrawString(top_text[i].ToString(), font, brush, 0, 0, string_format);
                     gr.ResetTransform();
 
                     // Increment theta.
@@ -115,6 +120,7 @@ namespace howto_text_on_circle
                 // *************************
                 // * Draw the bottom text. *
                 // *************************
+                // Измерьте символы.
                 // Measure the characters.
                 rects = MeasureCharacters(gr, font, bottom_text);
 
@@ -127,6 +133,7 @@ namespace howto_text_on_circle
                 start_angle = Math.PI / 2 + text_width / 2 * width_to_angle;
                 theta = start_angle;
 
+                // Сбросьте StringFormat, чтобы рисовать ниже начала рисунка.
                 // Reset the StringFormat to draw below the drawing origin.
                 string_format.LineAlignment = StringAlignment.Near;
 
@@ -143,8 +150,7 @@ namespace howto_text_on_circle
                     gr.TranslateTransform((float)x, (float)y, MatrixOrder.Append);
 
                     // Draw the character.
-                    gr.DrawString(bottom_text[i].ToString(), font, brush,
-                        0, 0, string_format);
+                    gr.DrawString(bottom_text[i].ToString(), font, brush, 0, 0, string_format);
                     gr.ResetTransform();
 
                     // Increment theta.
@@ -153,6 +159,7 @@ namespace howto_text_on_circle
             }
         }
 
+        // Измерьте символы в строке.
         // Measure the characters in the string.
         private List<RectangleF> MeasureCharacters(Graphics gr, Font font, string text)
         {
@@ -184,9 +191,7 @@ namespace howto_text_on_circle
                 // Save all but the last rectangle.
                 for (int i = 0; i < rects.Count + 1 - 1; i++)
                 {
-                    RectangleF new_rect = new RectangleF(
-                        x, rects[i].Top,
-                        rects[i].Width, rects[i].Height);
+                    RectangleF new_rect = new RectangleF(x, rects[i].Top, rects[i].Width, rects[i].Height);
                     results.Add(new_rect);
 
                     // Move to the next character's X position.
@@ -198,10 +203,9 @@ namespace howto_text_on_circle
             return results;
         }
 
-        // Measure the characters in a string with
-        // no more than 32 characters.
-        private List<RectangleF> MeasureCharactersInWord(
-            Graphics gr, Font font, string text)
+        // Измерить символы в строке длиной не более 32 символов.
+        // Measure the characters in a string with no more than 32 characters.
+        private List<RectangleF> MeasureCharactersInWord(Graphics gr, Font font, string text)
         {
             List<RectangleF> result = new List<RectangleF>();
 
@@ -222,9 +226,7 @@ namespace howto_text_on_circle
                 // Find the character ranges.
                 RectangleF rect = new RectangleF(0, 0, 10000, 100);
                 Region[] regions =
-                    gr.MeasureCharacterRanges(
-                        text, font, this.ClientRectangle,
-                        string_format);
+                    gr.MeasureCharacterRanges(text, font, this.ClientRectangle, string_format);
 
                 // Convert the regions into rectangles.
                 foreach (Region region in regions)

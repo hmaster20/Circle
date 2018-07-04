@@ -38,7 +38,7 @@
             this.picText.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.picText.Location = new System.Drawing.Point(12, 12);
             this.picText.Name = "picText";
-            this.picText.Size = new System.Drawing.Size(300, 300);
+            this.picText.Size = new System.Drawing.Size(302, 301);
             this.picText.TabIndex = 1;
             this.picText.TabStop = false;
             // 
