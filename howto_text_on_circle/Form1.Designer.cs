@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.picText = new System.Windows.Forms.PictureBox();
+            this.buttonOne = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picText)).BeginInit();
             this.SuspendLayout();
             // 
@@ -42,11 +43,22 @@
             this.picText.TabIndex = 1;
             this.picText.TabStop = false;
             // 
+            // buttonOne
+            // 
+            this.buttonOne.Location = new System.Drawing.Point(392, 264);
+            this.buttonOne.Name = "buttonOne";
+            this.buttonOne.Size = new System.Drawing.Size(75, 23);
+            this.buttonOne.TabIndex = 2;
+            this.buttonOne.Text = "Point One";
+            this.buttonOne.UseVisualStyleBackColor = true;
+            this.buttonOne.Click += new System.EventHandler(this.buttonOne_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(324, 324);
+            this.ClientSize = new System.Drawing.Size(545, 324);
+            this.Controls.Add(this.buttonOne);
             this.Controls.Add(this.picText);
             this.Name = "Form1";
             this.Text = "howto_text_on_circle";
@@ -59,6 +71,7 @@
         #endregion
 
         private System.Windows.Forms.PictureBox picText;
+        private System.Windows.Forms.Button buttonOne;
     }
 }
 
