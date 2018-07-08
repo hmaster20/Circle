@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
+using System.Threading;
 
 namespace howto_text_on_circle
 {
@@ -291,64 +292,39 @@ namespace howto_text_on_circle
                 string_format.LineAlignment = StringAlignment.Far;
 
                 // Используется для масштабирования от радианов до градусов.
-                double radians_to_degrees = 180.0 / Math.PI;
+                double DegreesInRadians = 180.0 / Math.PI;
 
                 // * Draw the top text. *
-                // **********************
                 // Измерьте символы.
-                List<RectangleF> results = MeasureSymbolsInWord(gr, font, top_text);
-                List<RectangleF> rects = new List<RectangleF>
-                {
-                    new RectangleF(results[0].Left, results[0].Top, results[0].Width, results[0].Height)
-                };
-
-
-                // Use LINQ to add up the character widths.
-                var width_query = from RectangleF rect in rects select rect.Width;
-                float text_width = width_query.Sum();
+                float text_width = (MeasureSymbolsInWord(gr, font, top_text)).Width;
 
                 // Найдите начальный угол.
-                // Find the starting angle.
                 double width_to_angle = 1 / radius;
                 double start_angle = -Math.PI / 2 - text_width / 2 * width_to_angle;
                 double theta = start_angle;
 
                 // Draw the characters.
-                for (int i = 0; i < top_text.Length; i++)
-                {
-                    // Смотрите, куда идет этот персонаж.
-                    // See where this character goes.
-                    theta += rects[i].Width / 2 * width_to_angle;
-                    double x = cx + radius * Math.Cos(theta);
-                    double y = cy + radius * Math.Sin(theta);
+                theta += text_width / 2 * width_to_angle;
+                double gradus = 180.0 / Math.PI * theta;
+                theta = Math.PI / 180.0 * -180; //-180 -135 -90 -45  0
 
-                    // Преобразовать, чтобы расположить символ.
-                    // Transform to position the character.
-                    gr.RotateTransform((float)(radians_to_degrees * (theta + Math.PI / 2)));
-                    gr.TranslateTransform((float)x, (float)y, MatrixOrder.Append);
+                double x = cx + radius * Math.Cos(theta);
+                double y = cy + radius * Math.Sin(theta);
 
-                    // Draw the character.
-                    gr.DrawString(top_text[i].ToString(), font, brush, 0, 0, string_format);
-                    gr.ResetTransform();
+                // угол поворота символа в градусах
+                float angleRotate = (float)(DegreesInRadians * (theta + Math.PI / 2));
 
-                    // Increment theta.
-                    theta += rects[i].Width / 2 * width_to_angle;
-                }
+                // Преобразовать, чтобы расположить символ.
+                gr.RotateTransform(angleRotate);
+                gr.TranslateTransform((float)x, (float)y, MatrixOrder.Append);
 
-                // *************************
-                // * Draw the bottom text. *
-                // *************************
+                // Draw the character.
+                gr.DrawString(top_text, font, brush, 0, 0, string_format);
+                gr.ResetTransform();
+
+                // ********** Draw the bottom text. **********
                 // Измерьте символы.
-                // Measure the characters.
-                results = MeasureSymbolsInWord(gr, font, bottom_text);
-                rects = new List<RectangleF>
-                {
-                    new RectangleF(results[0].Left, results[0].Top, results[0].Width, results[0].Height)
-                };
-
-                // Use LINQ to add up the character widths.
-                width_query = from RectangleF rect in rects select rect.Width;
-                text_width = width_query.Sum();
+                text_width = (MeasureSymbolsInWord(gr, font, bottom_text)).Width;
 
                 // Find the starting angle.
                 width_to_angle = 1 / radius;
@@ -356,60 +332,162 @@ namespace howto_text_on_circle
                 theta = start_angle;
 
                 // Сбросьте StringFormat, чтобы рисовать ниже начала рисунка.
-                // Reset the StringFormat to draw below the drawing origin.
                 string_format.LineAlignment = StringAlignment.Near;
 
                 // Draw the characters.
-                for (int i = 0; i < bottom_text.Length; i++)
-                {
-                    // See where this character goes.
-                    theta -= rects[i].Width / 2 * width_to_angle;
-                    double x = cx + radius * Math.Cos(theta);
-                    double y = cy + radius * Math.Sin(theta);
+                theta -= text_width / 2 * width_to_angle;
+                x = cx + radius * Math.Cos(theta);
+                y = cy + radius * Math.Sin(theta);
 
-                    // Transform to position the character.
-                    gr.RotateTransform((float)(radians_to_degrees * (theta - Math.PI / 2)));
-                    gr.TranslateTransform((float)x, (float)y, MatrixOrder.Append);
+                // Transform to position the character.
+                gr.RotateTransform((float)(DegreesInRadians * (theta - Math.PI / 2)));
+                gr.TranslateTransform((float)x, (float)y, MatrixOrder.Append);
 
-                    // Draw the character.
-                    gr.DrawString(bottom_text[i].ToString(), font, brush, 0, 0, string_format);
-                    gr.ResetTransform();
-
-                    // Increment theta.
-                    theta -= rects[i].Width / 2 * width_to_angle;
-                }
+                // Draw the character.
+                gr.DrawString(bottom_text, font, brush, 0, 0, string_format);
+                gr.ResetTransform();
             }
         }
 
-
-        // Измерить символы в строке длиной не более 32 символов.
-        private List<RectangleF> MeasureSymbolsInWord(Graphics gr, Font font, string text)
+        // Измерить символы в строке
+        private RectangleF MeasureSymbolsInWord(Graphics gr, Font font, string text)
         {
-            List<RectangleF> result = new List<RectangleF>();
-
             using (StringFormat string_format = new StringFormat())
             {
                 string_format.Alignment = StringAlignment.Near;
                 string_format.LineAlignment = StringAlignment.Near;
                 string_format.Trimming = StringTrimming.None;
                 string_format.FormatFlags = StringFormatFlags.MeasureTrailingSpaces;
-
-                CharacterRange[] ranges = new CharacterRange[text.Length];
-                for (int i = 0; i < text.Length; i++)
-                {
-                    ranges[i] = new CharacterRange(i, 1);
-                }
-                string_format.SetMeasurableCharacterRanges(ranges);
+                string_format.SetMeasurableCharacterRanges(new CharacterRange[1] { new CharacterRange(0, 1) });
 
                 // Find the character ranges.
                 Region[] regions = gr.MeasureCharacterRanges(text, font, this.ClientRectangle, string_format);
-
-                // Convert the regions into rectangles.
-                foreach (Region region in regions)
-                    result.Add(region.GetBounds(gr));
+                return regions[0].GetBounds(gr);
             }
+        }
 
-            return result;
+
+
+
+
+        /////////////////////////////////////////////////////////////////////////////////
+
+        private void buttonFor_Click(object sender, EventArgs e)
+        {
+            // Получить параметры круга.
+            // Get the circle's parameters.
+            float font_height = 24;
+            float radius = Math.Min(
+                picText.ClientSize.Width,
+                picText.ClientSize.Height) / 2 - font_height - 5;
+            float cx = picText.ClientSize.Width / 2;
+            float cy = picText.ClientSize.Height / 2;
+
+            // Сделайте растровое изображение для хранения текста.
+            Bitmap bm = new Bitmap(
+                picText.ClientSize.Width,
+                picText.ClientSize.Height);
+
+            using (Graphics gr = Graphics.FromImage(bm))
+            {
+                gr.Clear(Color.White);
+                gr.SmoothingMode = SmoothingMode.AntiAlias;
+                gr.TextRenderingHint = TextRenderingHint.AntiAlias;
+
+                // Сделать шрифт для использования
+                using (Font font = new Font("Times New Roman", font_height, FontStyle.Regular, GraphicsUnit.Pixel))
+                {
+                    // Draw the circle.
+                    gr.DrawEllipse(Pens.Red, cx - radius, cy - radius, 2 * radius, 2 * radius);
+                    gr.DrawEllipse(Pens.Blue, cx - radius - 29, cy - radius - 29, 2 * radius + 58, 2 * radius + 58);
+
+                    // Draw the text.
+                    //DrawOnCircle2(gr, font, Brushes.Green, radius, cx, cy, "T", "_");
+                    string top_text = "T";
+
+                    // Используйте StringFormat, чтобы нарисовать средний верх каждого символа в (0, 0).
+                    using (StringFormat string_format = new StringFormat())
+                    {
+                        string_format.Alignment = StringAlignment.Center;
+                        string_format.LineAlignment = StringAlignment.Far;
+
+                        // Используется для масштабирования от радианов до градусов.
+                        double DegreesInRadians = 180.0 / Math.PI;
+
+                        // * Draw the top text. *
+                        // Измерьте символы.
+                        float text_width = (MeasureSymbolsInWord2(gr, font, top_text)).Width;
+
+                        // Найдите начальный угол.
+                        double width_to_angle = 1 / radius;
+                        double start_angle = -Math.PI / 2 - text_width / 2 * width_to_angle;
+                        double theta = start_angle;
+
+                        // Draw the characters.
+                        theta += text_width / 2 * width_to_angle;
+                        double gradus = 180.0 / Math.PI * theta;
+                        //theta = Math.PI / 180.0 * -135; //-180 -135 -90 -45  0
+
+                        //for (int i = -15; i < 345; i+=30)
+                        for (int i = 165; i > -15; i -= 30)
+                        {
+                            //Thread.Sleep(500);
+
+                            theta = Math.PI / 180.0 * -i;
+                            double x = cx + radius * Math.Cos(theta);
+                            double y = cy + radius * Math.Sin(theta);
+
+                            // угол поворота символа в градусах
+                            float angleRotate = (float)(DegreesInRadians * (theta + Math.PI / 2));
+
+                            // Преобразовать, чтобы расположить символ.
+                            gr.RotateTransform(angleRotate);
+                            gr.TranslateTransform((float)x, (float)y, MatrixOrder.Append);
+
+                            // Draw the character.
+                            gr.DrawString(top_text, font, Brushes.Green, 0, 0, string_format);
+                            gr.ResetTransform();
+
+                            picText.Image = bm;
+                        }
+                    
+
+                        //double x = cx + radius * Math.Cos(theta);
+                        //double y = cy + radius * Math.Sin(theta);
+
+                        //// угол поворота символа в градусах
+                        //float angleRotate = (float)(DegreesInRadians * (theta + Math.PI / 2));
+
+                        //// Преобразовать, чтобы расположить символ.
+                        //gr.RotateTransform(angleRotate);
+                        //gr.TranslateTransform((float)x, (float)y, MatrixOrder.Append);
+
+                        //// Draw the character.
+                        //gr.DrawString(top_text, font, Brushes.Green, 0, 0, string_format);
+                        //gr.ResetTransform();
+                    }
+                }
+            }
+            // Display the result.
+            picText.Image = bm;
+        }
+
+
+        // Измерить символы в строке
+        private RectangleF MeasureSymbolsInWord2(Graphics gr, Font font, string text)
+        {
+            using (StringFormat string_format = new StringFormat())
+            {
+                string_format.Alignment = StringAlignment.Near;
+                string_format.LineAlignment = StringAlignment.Near;
+                string_format.Trimming = StringTrimming.None;
+                string_format.FormatFlags = StringFormatFlags.MeasureTrailingSpaces;
+                string_format.SetMeasurableCharacterRanges(new CharacterRange[1] { new CharacterRange(0, 1) });
+
+                // Find the character ranges.
+                Region[] regions = gr.MeasureCharacterRanges(text, font, this.ClientRectangle, string_format);
+                return regions[0].GetBounds(gr);
+            }
         }
 
 

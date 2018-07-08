@@ -30,6 +30,7 @@
         {
             this.picText = new System.Windows.Forms.PictureBox();
             this.buttonOne = new System.Windows.Forms.Button();
+            this.buttonFor = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picText)).BeginInit();
             this.SuspendLayout();
             // 
@@ -45,7 +46,7 @@
             // 
             // buttonOne
             // 
-            this.buttonOne.Location = new System.Drawing.Point(392, 264);
+            this.buttonOne.Location = new System.Drawing.Point(393, 234);
             this.buttonOne.Name = "buttonOne";
             this.buttonOne.Size = new System.Drawing.Size(75, 23);
             this.buttonOne.TabIndex = 2;
@@ -53,11 +54,22 @@
             this.buttonOne.UseVisualStyleBackColor = true;
             this.buttonOne.Click += new System.EventHandler(this.buttonOne_Click);
             // 
+            // buttonFor
+            // 
+            this.buttonFor.Location = new System.Drawing.Point(393, 272);
+            this.buttonFor.Name = "buttonFor";
+            this.buttonFor.Size = new System.Drawing.Size(75, 23);
+            this.buttonFor.TabIndex = 2;
+            this.buttonFor.Text = "Point For";
+            this.buttonFor.UseVisualStyleBackColor = true;
+            this.buttonFor.Click += new System.EventHandler(this.buttonFor_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(545, 324);
+            this.Controls.Add(this.buttonFor);
             this.Controls.Add(this.buttonOne);
             this.Controls.Add(this.picText);
             this.Name = "Form1";
@@ -72,6 +84,7 @@
 
         private System.Windows.Forms.PictureBox picText;
         private System.Windows.Forms.Button buttonOne;
+        private System.Windows.Forms.Button buttonFor;
     }
 }
 
