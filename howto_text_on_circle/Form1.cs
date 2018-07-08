@@ -404,6 +404,7 @@ namespace howto_text_on_circle
                     // Draw the text.
                     //DrawOnCircle2(gr, font, Brushes.Green, radius, cx, cy, "T", "_");
                     string top_text = "T";
+                    string bottom_text = "T";
 
                     // Используйте StringFormat, чтобы нарисовать средний верх каждого символа в (0, 0).
                     using (StringFormat string_format = new StringFormat())
@@ -447,24 +448,41 @@ namespace howto_text_on_circle
                             // Draw the character.
                             gr.DrawString(top_text, font, Brushes.Green, 0, 0, string_format);
                             gr.ResetTransform();
-
-                            picText.Image = bm;
                         }
-                    
 
-                        //double x = cx + radius * Math.Cos(theta);
-                        //double y = cy + radius * Math.Sin(theta);
 
-                        //// угол поворота символа в градусах
-                        //float angleRotate = (float)(DegreesInRadians * (theta + Math.PI / 2));
+                        // ********** Draw the bottom text. **********
+                        // Измерьте символы.
+                        text_width = (MeasureSymbolsInWord(gr, font, bottom_text)).Width;
 
-                        //// Преобразовать, чтобы расположить символ.
-                        //gr.RotateTransform(angleRotate);
-                        //gr.TranslateTransform((float)x, (float)y, MatrixOrder.Append);
+                        // Find the starting angle.
+                        width_to_angle = 1 / radius;
+                        start_angle = Math.PI / 2 + text_width / 2 * width_to_angle;
+                        theta = start_angle;
 
-                        //// Draw the character.
-                        //gr.DrawString(top_text, font, Brushes.Green, 0, 0, string_format);
-                        //gr.ResetTransform();
+                        // Сбросьте StringFormat, чтобы рисовать ниже начала рисунка.
+                        string_format.LineAlignment = StringAlignment.Near;
+                         
+
+                        for (int i = 165; i > -15; i -= 30)
+                        {
+
+                            // Draw the characters.
+                            //theta -= text_width / 2 * width_to_angle;
+
+                            theta = Math.PI / 180.0 * i;
+                            double x = cx + radius * Math.Cos(theta);
+                            double y = cy + radius * Math.Sin(theta);
+
+                            // Transform to position the character.
+                            gr.RotateTransform((float)(DegreesInRadians * (theta - Math.PI / 2)));
+                            gr.TranslateTransform((float)x, (float)y, MatrixOrder.Append);
+
+                            // Draw the character.
+                            gr.DrawString(bottom_text, font, Brushes.Gold, 0, 0, string_format);
+                            gr.ResetTransform();
+                        }
+
                     }
                 }
             }
