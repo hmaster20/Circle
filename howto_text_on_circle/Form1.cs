@@ -242,8 +242,7 @@ namespace howto_text_on_circle
 
 
 
-        //  ---- TEST ----
-
+  
         private void buttonOne_Click(object sender, EventArgs e)
         {
             // Получить параметры круга.
@@ -370,6 +369,8 @@ namespace howto_text_on_circle
 
 
 
+
+
         /////////////////////////////////////////////////////////////////////////////////
 
         private void buttonFor_Click(object sender, EventArgs e)
@@ -401,8 +402,7 @@ namespace howto_text_on_circle
                     gr.DrawEllipse(Pens.Red, cx - radius, cy - radius, 2 * radius, 2 * radius);
                     gr.DrawEllipse(Pens.Blue, cx - radius - 29, cy - radius - 29, 2 * radius + 58, 2 * radius + 58);
 
-                    // Draw the text.
-                    //DrawOnCircle2(gr, font, Brushes.Green, radius, cx, cy, "T", "_");
+                    // Draw the next text.
                     string top_text = "T";
                     string bottom_text = "T";
 
@@ -412,7 +412,6 @@ namespace howto_text_on_circle
                         string_format.Alignment = StringAlignment.Center;
                         string_format.LineAlignment = StringAlignment.Far;
 
-                        // Используется для масштабирования от радианов до градусов.
                         double DegreesInRadians = 180.0 / Math.PI;
 
                         // * Draw the top text. *
@@ -429,11 +428,8 @@ namespace howto_text_on_circle
                         double gradus = 180.0 / Math.PI * theta;
                         //theta = Math.PI / 180.0 * -135; //-180 -135 -90 -45  0
 
-                        //for (int i = -15; i < 345; i+=30)
                         for (int i = 165; i > -15; i -= 30)
                         {
-                            //Thread.Sleep(500);
-
                             theta = Math.PI / 180.0 * -i;
                             double x = cx + radius * Math.Cos(theta);
                             double y = cy + radius * Math.Sin(theta);
@@ -508,6 +504,57 @@ namespace howto_text_on_circle
             }
         }
 
+        private void buttonMaps_Click(object sender, EventArgs e)
+        {
+            int Diameter = 300;
 
+            Graphics g = picText.CreateGraphics();
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            g.Clear(Control.DefaultBackColor);
+
+            Pen pen = new Pen(Brushes.Aquamarine, 3.0f);
+            RectangleF area = new RectangleF(30, 30, Diameter, Diameter);
+            g.DrawEllipse(pen, area);   // Главный круг
+
+            RectangleF circle = new RectangleF(0, 0, 5, 5);   // размеры круга на орбите
+            PointF loc = PointF.Empty;
+            PointF locMini = PointF.Empty;
+            float radius = (Diameter / 2);
+            PointF org = new PointF(radius, radius);
+
+            // Внутренний круг
+            int PsevdoCircleDiameter = Diameter - 50;
+            RectangleF PsevdoCircle = new RectangleF(0, 0, PsevdoCircleDiameter, PsevdoCircleDiameter);
+            PsevdoCircle.X = (area.Left + area.Width / 2) - (PsevdoCircle.Width / 2);
+            PsevdoCircle.Y = (area.Top + area.Height / 2) - (PsevdoCircle.Height / 2);
+
+
+            g.DrawEllipse(new Pen(Brushes.Brown, 2.0f), PsevdoCircle);
+
+            for (int angle = 0; angle < 360;)
+            {
+                float xloc = (float)(radius * Math.Cos(angle * Math.PI / 180f)) + org.X;
+                float yloc = (float)(radius * Math.Sin(angle * Math.PI / 180f)) + org.Y;
+                loc = new PointF(xloc, yloc);
+
+
+                int miniRadius = (PsevdoCircleDiameter / 2);
+                float xMini = (float)(miniRadius * Math.Cos(angle * Math.PI / 180f)) + miniRadius;
+                float yMini = (float)(miniRadius * Math.Sin(angle * Math.PI / 180f)) + miniRadius;
+                locMini = new PointF(xMini, yMini);
+
+
+                // Точка на малой орбите
+                float miniX = locMini.X - (1 / 2) + PsevdoCircle.X;
+                float miniY = locMini.Y - (1 / 2) + PsevdoCircle.Y;
+                // Точка на БОЛЬШОЙ орбите
+                float maxX = loc.X - (1 / 2) + area.X;
+                float maxY = loc.Y - (1 / 2) + area.Y;
+
+                g.DrawLine(new Pen(Brushes.Blue, 2.0f), new PointF(miniX, miniY), new PointF(maxX, maxY));
+
+                angle = angle + 30;
+            }
+        }
     }
 }

@@ -31,6 +31,7 @@
             this.picText = new System.Windows.Forms.PictureBox();
             this.buttonOne = new System.Windows.Forms.Button();
             this.buttonFor = new System.Windows.Forms.Button();
+            this.buttonMaps = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picText)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,7 +47,7 @@
             // 
             // buttonOne
             // 
-            this.buttonOne.Location = new System.Drawing.Point(393, 234);
+            this.buttonOne.Location = new System.Drawing.Point(393, 197);
             this.buttonOne.Name = "buttonOne";
             this.buttonOne.Size = new System.Drawing.Size(75, 23);
             this.buttonOne.TabIndex = 2;
@@ -56,7 +57,7 @@
             // 
             // buttonFor
             // 
-            this.buttonFor.Location = new System.Drawing.Point(393, 272);
+            this.buttonFor.Location = new System.Drawing.Point(393, 226);
             this.buttonFor.Name = "buttonFor";
             this.buttonFor.Size = new System.Drawing.Size(75, 23);
             this.buttonFor.TabIndex = 2;
@@ -64,11 +65,22 @@
             this.buttonFor.UseVisualStyleBackColor = true;
             this.buttonFor.Click += new System.EventHandler(this.buttonFor_Click);
             // 
+            // buttonMaps
+            // 
+            this.buttonMaps.Location = new System.Drawing.Point(393, 255);
+            this.buttonMaps.Name = "buttonMaps";
+            this.buttonMaps.Size = new System.Drawing.Size(75, 23);
+            this.buttonMaps.TabIndex = 2;
+            this.buttonMaps.Text = "Maps";
+            this.buttonMaps.UseVisualStyleBackColor = true;
+            this.buttonMaps.Click += new System.EventHandler(this.buttonMaps_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(545, 324);
+            this.Controls.Add(this.buttonMaps);
             this.Controls.Add(this.buttonFor);
             this.Controls.Add(this.buttonOne);
             this.Controls.Add(this.picText);
@@ -85,6 +97,7 @@
         private System.Windows.Forms.PictureBox picText;
         private System.Windows.Forms.Button buttonOne;
         private System.Windows.Forms.Button buttonFor;
+        private System.Windows.Forms.Button buttonMaps;
     }
 }
 
