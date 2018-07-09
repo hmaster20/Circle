@@ -242,7 +242,7 @@ namespace howto_text_on_circle
 
 
 
-  
+
         private void buttonOne_Click(object sender, EventArgs e)
         {
             // Получить параметры круга.
@@ -458,7 +458,7 @@ namespace howto_text_on_circle
 
                         // Сбросьте StringFormat, чтобы рисовать ниже начала рисунка.
                         string_format.LineAlignment = StringAlignment.Near;
-                         
+
 
                         for (int i = 165; i > -15; i -= 30)
                         {
@@ -486,7 +486,6 @@ namespace howto_text_on_circle
             picText.Image = bm;
         }
 
-
         // Измерить символы в строке
         private RectangleF MeasureSymbolsInWord2(Graphics gr, Font font, string text)
         {
@@ -504,56 +503,244 @@ namespace howto_text_on_circle
             }
         }
 
+
+
+
+
+
         private void buttonMaps_Click(object sender, EventArgs e)
         {
-            int Diameter = 300;
-
             Graphics g = picText.CreateGraphics();
             g.SmoothingMode = SmoothingMode.AntiAlias;
             g.Clear(Control.DefaultBackColor);
 
-            Pen pen = new Pen(Brushes.Aquamarine, 3.0f);
-            RectangleF area = new RectangleF(30, 30, Diameter, Diameter);
-            g.DrawEllipse(pen, area);   // Главный круг
+            Pen pen = new Pen(Brushes.RosyBrown, 2.0f);
 
-            RectangleF circle = new RectangleF(0, 0, 5, 5);   // размеры круга на орбите
-            PointF loc = PointF.Empty;
-            PointF locMini = PointF.Empty;
-            float radius = (Diameter / 2);
-            PointF org = new PointF(radius, radius);
+            // Главный круг
+            int Diameter = picText.Width - 10;
+            RectangleF area = new RectangleF(0, 0, Diameter, Diameter);
+            g.DrawEllipse(pen, area);
 
             // Внутренний круг
             int PsevdoCircleDiameter = Diameter - 50;
             RectangleF PsevdoCircle = new RectangleF(0, 0, PsevdoCircleDiameter, PsevdoCircleDiameter);
             PsevdoCircle.X = (area.Left + area.Width / 2) - (PsevdoCircle.Width / 2);
             PsevdoCircle.Y = (area.Top + area.Height / 2) - (PsevdoCircle.Height / 2);
+            g.DrawEllipse(pen, PsevdoCircle);
 
 
-            g.DrawEllipse(new Pen(Brushes.Brown, 2.0f), PsevdoCircle);
-
-            for (int angle = 0; angle < 360;)
+            for (int angle = 0; angle < 360; angle += 30)
             {
-                float xloc = (float)(radius * Math.Cos(angle * Math.PI / 180f)) + org.X;
-                float yloc = (float)(radius * Math.Sin(angle * Math.PI / 180f)) + org.Y;
-                loc = new PointF(xloc, yloc);
+                Thread.Sleep(100);
+                float radius = (Diameter / 2);
+                float miniRadius = (PsevdoCircleDiameter / 2);
 
-
-                int miniRadius = (PsevdoCircleDiameter / 2);
                 float xMini = (float)(miniRadius * Math.Cos(angle * Math.PI / 180f)) + miniRadius;
                 float yMini = (float)(miniRadius * Math.Sin(angle * Math.PI / 180f)) + miniRadius;
-                locMini = new PointF(xMini, yMini);
-
+                PointF locMini = new PointF(xMini, yMini);
 
                 // Точка на малой орбите
                 float miniX = locMini.X - (1 / 2) + PsevdoCircle.X;
                 float miniY = locMini.Y - (1 / 2) + PsevdoCircle.Y;
+                PointF mini = new PointF(miniX, miniY);
+
+
+                float xloc = (float)(radius * Math.Cos(angle * Math.PI / 180f)) + radius;
+                float yloc = (float)(radius * Math.Sin(angle * Math.PI / 180f)) + radius;
+                PointF loc = new PointF(xloc, yloc);
+
                 // Точка на БОЛЬШОЙ орбите
                 float maxX = loc.X - (1 / 2) + area.X;
                 float maxY = loc.Y - (1 / 2) + area.Y;
+                PointF maxy = new PointF(maxX, maxY);
 
-                g.DrawLine(new Pen(Brushes.Blue, 2.0f), new PointF(miniX, miniY), new PointF(maxX, maxY));
+                g.DrawLine(pen, mini, maxy);
+            }
+        }
 
-                angle = angle + 30;
+
+
+
+
+
+
+        /////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////
+
+        private void buttonMapsWithSymbol_Click(object sender, EventArgs e)
+        {
+            Graphics g = picText.CreateGraphics();
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            g.TextRenderingHint = TextRenderingHint.AntiAlias;// добавлен из модуля рисования символов
+            g.Clear(Control.DefaultBackColor);
+
+            Pen pen = new Pen(Brushes.RosyBrown, 2.0f);
+
+            // Главный круг
+            //int Diameter = picText.Width - 10;
+            //RectangleF area = new RectangleF(0, 0, Diameter, Diameter);
+            //g.DrawEllipse(pen, area);
+
+            // Внутренний круг
+            //int PsevdoCircleDiameter = Diameter - 50;
+            //RectangleF PsevdoCircle = new RectangleF(0, 0, PsevdoCircleDiameter, PsevdoCircleDiameter);
+            //PsevdoCircle.X = (area.Left + area.Width / 2) - (PsevdoCircle.Width / 2);
+            //PsevdoCircle.Y = (area.Top + area.Height / 2) - (PsevdoCircle.Height / 2);
+            //g.DrawEllipse(pen, PsevdoCircle);
+
+
+            //float radius = (Diameter / 2);
+            //float miniRadius = (PsevdoCircleDiameter / 2);
+
+
+            //for (int angle = 0; angle < 360; angle += 30)
+            //{
+            //    Thread.Sleep(100);
+
+            //    float xMini = (float)(miniRadius * Math.Cos(angle * Math.PI / 180f)) + miniRadius;
+            //    float yMini = (float)(miniRadius * Math.Sin(angle * Math.PI / 180f)) + miniRadius;
+            //    PointF locMini = new PointF(xMini, yMini);
+
+            //    // Точка на малой орбите
+            //    float miniX = locMini.X - (1 / 2) + PsevdoCircle.X;
+            //    float miniY = locMini.Y - (1 / 2) + PsevdoCircle.Y;
+            //    PointF mini = new PointF(miniX, miniY);
+
+
+            //    float xloc = (float)(radius * Math.Cos(angle * Math.PI / 180f)) + radius;
+            //    float yloc = (float)(radius * Math.Sin(angle * Math.PI / 180f)) + radius;
+            //    PointF loc = new PointF(xloc, yloc);
+
+            //    // Точка на БОЛЬШОЙ орбите
+            //    float maxX = loc.X - (1 / 2) + area.X;
+            //    float maxY = loc.Y - (1 / 2) + area.Y;
+            //    PointF maxy = new PointF(maxX, maxY);
+
+            //    g.DrawLine(pen, mini, maxy);
+            //}
+
+            /////////////////////////////////////////////////////////////////////
+            
+            // Получить параметры круга.
+            // Get the circle's parameters.
+            float font_height = 24;
+            float radius = Math.Min(
+                picText.ClientSize.Width,
+                picText.ClientSize.Height) / 2 - font_height - 5;
+
+            //radius = radius - font_height - 5;
+
+            float cx = picText.ClientSize.Width / 2;
+            float cy = picText.ClientSize.Height / 2;
+
+            // Сделайте растровое изображение для хранения текста.
+            Bitmap bm = new Bitmap(
+                picText.ClientSize.Width,
+                picText.ClientSize.Height);
+
+
+            // Сделать шрифт для использования
+            using (Font font = new Font("Times New Roman", font_height, FontStyle.Regular, GraphicsUnit.Pixel))
+            {
+                // Draw the circle.
+                g.DrawEllipse(Pens.Red, cx - radius, cy - radius, 2 * radius, 2 * radius);
+                g.DrawEllipse(Pens.Blue, cx - radius - 29, cy - radius - 29, 2 * radius + 58, 2 * radius + 58);
+
+                // Draw the next text.
+                string top_text = "T";
+                string bottom_text = "T";
+
+                // Используйте StringFormat, чтобы нарисовать средний верх каждого символа в (0, 0).
+                using (StringFormat string_format = new StringFormat())
+                {
+                    string_format.Alignment = StringAlignment.Center;
+                    string_format.LineAlignment = StringAlignment.Far;
+
+                    double DegreesInRadians = 180.0 / Math.PI;
+
+                    // * Draw the top text. *
+                    // Измерьте символы.
+                    float text_width = (MeasureSymbolsInWord3(g, font, top_text)).Width;
+
+                    // Начальный угол
+                    double width_to_angle = 1 / radius;
+                    double start_angle = -Math.PI / 2 - text_width / 2 * width_to_angle;
+                    double theta = start_angle;
+
+                    // Draw the characters.
+                    theta += text_width / 2 * width_to_angle;
+                    double gradus = 180.0 / Math.PI * theta;
+                    //theta = Math.PI / 180.0 * -135; //-180 -135 -90 -45  0
+
+                    for (int i = 165; i > -15; i -= 30)
+                    {
+                        theta = Math.PI / 180.0 * -i;
+                        double x = cx + radius * Math.Cos(theta);
+                        double y = cy + radius * Math.Sin(theta);
+
+                        // угол поворота символа в градусах
+                        float angleRotate = (float)(DegreesInRadians * (theta + Math.PI / 2));
+
+                        // Преобразовать, чтобы расположить символ.
+                        g.RotateTransform(angleRotate);
+                        g.TranslateTransform((float)x, (float)y, MatrixOrder.Append);
+
+                        // Draw the character.
+                        g.DrawString(top_text, font, Brushes.Green, 0, 0, string_format);
+                        g.ResetTransform();
+                    }
+
+
+                    // ********** Draw the bottom text. **********
+                    // Измерьте символы.
+                    text_width = (MeasureSymbolsInWord3(g, font, bottom_text)).Width;
+
+                    // Начальный угол
+                    width_to_angle = 1 / radius;
+                    start_angle = Math.PI / 2 + text_width / 2 * width_to_angle;
+                    theta = start_angle;
+
+                    // Сбросьте StringFormat, чтобы рисовать ниже начала рисунка.
+                    string_format.LineAlignment = StringAlignment.Near;
+
+
+                    for (int i = 165; i > -15; i -= 30)
+                    {
+
+                        // Draw the characters.
+                        //theta -= text_width / 2 * width_to_angle;
+
+                        theta = Math.PI / 180.0 * i;
+                        double x = cx + radius * Math.Cos(theta);
+                        double y = cy + radius * Math.Sin(theta);
+
+                        // Transform to position the character.
+                        g.RotateTransform((float)(DegreesInRadians * (theta - Math.PI / 2)));
+                        g.TranslateTransform((float)x, (float)y, MatrixOrder.Append);
+
+                        // Draw the character.
+                        g.DrawString(bottom_text, font, Brushes.Gold, 0, 0, string_format);
+                        g.ResetTransform();
+                    }
+
+                }
+            }
+        }
+
+        // Измерить символы в строке
+        private RectangleF MeasureSymbolsInWord3(Graphics gr, Font font, string text)
+        {
+            using (StringFormat string_format = new StringFormat())
+            {
+                string_format.Alignment = StringAlignment.Near;
+                string_format.LineAlignment = StringAlignment.Near;
+                string_format.Trimming = StringTrimming.None;
+                string_format.FormatFlags = StringFormatFlags.MeasureTrailingSpaces;
+                string_format.SetMeasurableCharacterRanges(new CharacterRange[1] { new CharacterRange(0, 1) });
+
+                // Find the character ranges.
+                Region[] regions = gr.MeasureCharacterRanges(text, font, this.ClientRectangle, string_format);
+                return regions[0].GetBounds(gr);
             }
         }
     }

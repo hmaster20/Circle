@@ -32,6 +32,7 @@
             this.buttonOne = new System.Windows.Forms.Button();
             this.buttonFor = new System.Windows.Forms.Button();
             this.buttonMaps = new System.Windows.Forms.Button();
+            this.buttonMapsWithSymbol = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picText)).BeginInit();
             this.SuspendLayout();
             // 
@@ -47,7 +48,7 @@
             // 
             // buttonOne
             // 
-            this.buttonOne.Location = new System.Drawing.Point(393, 197);
+            this.buttonOne.Location = new System.Drawing.Point(392, 156);
             this.buttonOne.Name = "buttonOne";
             this.buttonOne.Size = new System.Drawing.Size(75, 23);
             this.buttonOne.TabIndex = 2;
@@ -57,7 +58,7 @@
             // 
             // buttonFor
             // 
-            this.buttonFor.Location = new System.Drawing.Point(393, 226);
+            this.buttonFor.Location = new System.Drawing.Point(392, 185);
             this.buttonFor.Name = "buttonFor";
             this.buttonFor.Size = new System.Drawing.Size(75, 23);
             this.buttonFor.TabIndex = 2;
@@ -67,7 +68,7 @@
             // 
             // buttonMaps
             // 
-            this.buttonMaps.Location = new System.Drawing.Point(393, 255);
+            this.buttonMaps.Location = new System.Drawing.Point(392, 214);
             this.buttonMaps.Name = "buttonMaps";
             this.buttonMaps.Size = new System.Drawing.Size(75, 23);
             this.buttonMaps.TabIndex = 2;
@@ -75,11 +76,22 @@
             this.buttonMaps.UseVisualStyleBackColor = true;
             this.buttonMaps.Click += new System.EventHandler(this.buttonMaps_Click);
             // 
+            // buttonMapsWithSymbol
+            // 
+            this.buttonMapsWithSymbol.Location = new System.Drawing.Point(392, 243);
+            this.buttonMapsWithSymbol.Name = "buttonMapsWithSymbol";
+            this.buttonMapsWithSymbol.Size = new System.Drawing.Size(75, 23);
+            this.buttonMapsWithSymbol.TabIndex = 2;
+            this.buttonMapsWithSymbol.Text = "Maps&Symbol";
+            this.buttonMapsWithSymbol.UseVisualStyleBackColor = true;
+            this.buttonMapsWithSymbol.Click += new System.EventHandler(this.buttonMapsWithSymbol_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(545, 324);
+            this.Controls.Add(this.buttonMapsWithSymbol);
             this.Controls.Add(this.buttonMaps);
             this.Controls.Add(this.buttonFor);
             this.Controls.Add(this.buttonOne);
@@ -98,6 +110,7 @@
         private System.Windows.Forms.Button buttonOne;
         private System.Windows.Forms.Button buttonFor;
         private System.Windows.Forms.Button buttonMaps;
+        private System.Windows.Forms.Button buttonMapsWithSymbol;
     }
 }
 
