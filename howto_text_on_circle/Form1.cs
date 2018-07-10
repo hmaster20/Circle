@@ -620,15 +620,17 @@ namespace howto_text_on_circle
             //}
 
             /////////////////////////////////////////////////////////////////////
-            
+
             // Получить параметры круга.
             // Get the circle's parameters.
-            float font_height = 24;
+            //float font_height = 24;
+            float font_height = 20;
             float radius = Math.Min(
                 picText.ClientSize.Width,
                 picText.ClientSize.Height) / 2 - font_height - 5;
 
             //radius = radius - font_height - 5;
+            radius = radius - 5;
 
             float cx = picText.ClientSize.Width / 2;
             float cy = picText.ClientSize.Height / 2;
@@ -672,7 +674,28 @@ namespace howto_text_on_circle
                     double gradus = 180.0 / Math.PI * theta;
                     //theta = Math.PI / 180.0 * -135; //-180 -135 -90 -45  0
 
-                    for (int i = 165; i > -15; i -= 30)
+                    //string[] zodiac = new string[] { "♈", "♉", "♊", "♋", "♌", "♍", "♎", "♏", "♐", "♑", "♒", "♓" };
+                    string[] zodiacU = new string[] { "2648", "2649", "264A", "264B", "264C", "264D", "264E", "264F", "2650", "2651", "2652", "2653" };
+
+
+
+
+                    // Знаки зодиака
+                    // Овен         ♈ 	U + 2648
+                    // Телец        ♉ 	U + 2649
+                    // Близнецы     ♊ 	U + 264A
+                    // Рак          ♋ 	U + 264B
+                    // Лев          ♌ 	U + 264C
+                    // Дева         ♍ 	U + 264D
+                    // Весы         ♎ 	U + 264E
+                    // Скорпион     ♏ 	U + 264F
+                    // Змееносец    ⛎ 	U + 26CE
+                    // Стрелец      ♐ 	U + 2650
+                    // Козерог      ♑ 	U + 2651
+                    // Водолей      ♒ 	U + 2652
+                    // Рыбы         ♓ 	U + 2653
+
+                    for (int i = 165, s = 0; i > -15; i -= 30, s++)
                     {
                         theta = Math.PI / 180.0 * -i;
                         double x = cx + radius * Math.Cos(theta);
@@ -686,7 +709,12 @@ namespace howto_text_on_circle
                         g.TranslateTransform((float)x, (float)y, MatrixOrder.Append);
 
                         // Draw the character.
-                        g.DrawString(top_text, font, Brushes.Green, 0, 0, string_format);
+                        //g.DrawString(top_text, font, Brushes.Green, 0, 0, string_format);
+                        //g.DrawString(zodiac[s], font, Brushes.Green, 0, 0, string_format);
+                        int code = int.Parse(zodiacU[s], System.Globalization.NumberStyles.HexNumber);
+                        string unicodeString = char.ConvertFromUtf32(code);
+                        g.DrawString(unicodeString, font, Brushes.Green, 0, 0, string_format);
+
                         g.ResetTransform();
                     }
 
@@ -704,24 +732,81 @@ namespace howto_text_on_circle
                     string_format.LineAlignment = StringAlignment.Near;
 
 
-                    for (int i = 165; i > -15; i -= 30)
+                    for (int i = 165, s = 6; i > -15; i -= 30, s++)
                     {
 
                         // Draw the characters.
                         //theta -= text_width / 2 * width_to_angle;
 
                         theta = Math.PI / 180.0 * i;
-                        double x = cx + radius * Math.Cos(theta);
-                        double y = cy + radius * Math.Sin(theta);
+                        //double x = cx + 3 + radius * Math.Cos(theta);
+                        //double y = cy + 3 + radius * Math.Sin(theta);
+
+                        int sdvig = 0;
+                        if (i < 165)
+                        {
+                            sdvig = 3;
+                        }
+                        else
+                        {
+                            sdvig = 0;
+                        }
+
+                        double x = cx + sdvig + radius * Math.Cos(theta);
+                        double y = cy + sdvig + radius * Math.Sin(theta);
 
                         // Transform to position the character.
                         g.RotateTransform((float)(DegreesInRadians * (theta - Math.PI / 2)));
                         g.TranslateTransform((float)x, (float)y, MatrixOrder.Append);
 
                         // Draw the character.
-                        g.DrawString(bottom_text, font, Brushes.Gold, 0, 0, string_format);
+                        //g.DrawString(bottom_text, font, Brushes.Gold, 0, 0, string_format);
+
+                        int code = int.Parse(zodiacU[s], System.Globalization.NumberStyles.HexNumber);
+                        string unicodeString = char.ConvertFromUtf32(code);
+                        g.DrawString(unicodeString, font, Brushes.Green, 0, 0, string_format);
+                        //g.DrawString(zodiac[s], font, Brushes.Green, 0, 0, string_format);
                         g.ResetTransform();
                     }
+
+                    float BigRadius = radius + 29;
+                    float miniRadius = radius;
+
+                    for (int angle = 0; angle < 360; angle += 30)
+                    {
+
+                        float xMini = (float)(miniRadius * Math.Cos(angle * Math.PI / 180f)) + miniRadius;
+                        float yMini = (float)(miniRadius * Math.Sin(angle * Math.PI / 180f)) + miniRadius;
+                        PointF locMini = new PointF(xMini, yMini);
+
+                        // Точка на малой орбите
+                        //float miniX = locMini.X - (1 / 2) + PsevdoCircle.X;
+                        //float miniY = locMini.Y - (1 / 2) + PsevdoCircle.Y;
+                        float miniX = locMini.X - (1 / 2) + cx - radius;
+                        float miniY = locMini.Y - (1 / 2) + cy - radius;
+                        PointF mini = new PointF(miniX, miniY);
+
+
+                        float xloc = (float)(BigRadius * Math.Cos(angle * Math.PI / 180f)) + BigRadius;
+                        float yloc = (float)(BigRadius * Math.Sin(angle * Math.PI / 180f)) + BigRadius;
+                        PointF loc = new PointF(xloc, yloc);
+
+                        // Точка на БОЛЬШОЙ орбите
+                        //float maxX = loc.X - (1 / 2) + area.X;
+                        //float maxY = loc.Y - (1 / 2) + area.Y;
+                        float maxX = loc.X - (1 / 2) + cx - radius - 29;
+                        float maxY = loc.Y - (1 / 2) + cy - radius - 29;
+                        
+                        PointF maxy = new PointF(maxX, maxY);
+
+                        g.DrawLine(pen, mini, maxy);
+                    }
+
+
+                    //for (int i = 0, angle = 180; angle > 0; angle += 30, i++)
+                    //{
+                    //}
+
 
                 }
             }
