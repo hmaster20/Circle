@@ -475,9 +475,10 @@ namespace WindowsFormsApp1
             {
                 loc = calc.CirclePoint(radius, angle, org);
 
-                //circle.X = loc.X - (circle.Width / 2) + area.X;
-                //circle.Y = loc.Y - (circle.Height / 2) + area.Y;
-                //g.DrawEllipse(new Pen(Brushes.Red, 3.0f), circle);
+                // маленькие планеты
+                circle.X = loc.X - (circle.Width / 2) + area.X;
+                circle.Y = loc.Y - (circle.Height / 2) + area.Y;
+                g.DrawEllipse(new Pen(Brushes.Red, 3.0f), circle);
 
                 int miniRadius = (PsevdoCircleDiameter / 2);
                 PointF locMini = calc.CirclePoint(miniRadius, angle, new PointF(miniRadius, miniRadius));
