@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsOrbit", "Window
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "howto_text_on_circle", "howto_text_on_circle\howto_text_on_circle.csproj", "{67E80953-F2B7-4A6C-B723-4D4ED3001DCB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "howto_draw_graph", "howto_draw_graph\howto_draw_graph.csproj", "{E5C86F10-CFBE-421A-B143-FE25949B0DFE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{67E80953-F2B7-4A6C-B723-4D4ED3001DCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67E80953-F2B7-4A6C-B723-4D4ED3001DCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67E80953-F2B7-4A6C-B723-4D4ED3001DCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5C86F10-CFBE-421A-B143-FE25949B0DFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5C86F10-CFBE-421A-B143-FE25949B0DFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5C86F10-CFBE-421A-B143-FE25949B0DFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5C86F10-CFBE-421A-B143-FE25949B0DFE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
