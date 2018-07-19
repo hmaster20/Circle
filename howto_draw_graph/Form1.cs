@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
 using System.Drawing.Drawing2D;
 
 namespace howto_draw_graph
@@ -20,8 +19,8 @@ namespace howto_draw_graph
 
         // Some data.
         // U.S. gross national debt in $ billions.
-        // Souurce: http://en.wikipedia.org/wiki/United_States_public_debt.
-        private PointF[] Values = 
+        // Source: http://en.wikipedia.org/wiki/United_States_public_debt.
+        private PointF[] Values =
         {
             new PointF(1910, 2.6f),
             new PointF(1920, 25.9f),
@@ -65,10 +64,10 @@ namespace howto_draw_graph
             GraphXmax = picGraph.ClientSize.Width - 10;
             GraphYmin = 40;
             GraphYmax = picGraph.ClientSize.Height - 70;
-            Rectangle graph_area = new Rectangle(
-                GraphXmin, GraphYmin, GraphXmax - GraphXmin, GraphYmax - GraphYmin);
+            Rectangle graph_area = new Rectangle(GraphXmin, GraphYmin, GraphXmax - GraphXmin, GraphYmax - GraphYmin);
             e.Graphics.FillRectangle(Brushes.White, graph_area);
 
+            // Нарисуем вещи в глобальном координатном пространстве графика.
             // Draw things in the graph's world coordinate space.
             DrawInGraphCoordinates(e.Graphics, GraphXmin, GraphXmax, GraphYmin, GraphYmax);
 
@@ -80,6 +79,7 @@ namespace howto_draw_graph
             DrawWithGraphTransformation(e.Graphics, graph_transformation);
         }
 
+        // Рисуем вещи, которые используют преобразование идентичности.
         // Draw things that use the identity transformation.
         private void DrawWithoutTransformation(Graphics gr)
         {
@@ -91,21 +91,21 @@ namespace howto_draw_graph
                     string_format.Alignment = StringAlignment.Center;
                     string_format.LineAlignment = StringAlignment.Center;
                     Point title_center = new Point(picGraph.ClientSize.Width / 2, 20);
-                    gr.DrawString("U.S. Gross National Debt",
-                        title_font, Brushes.Blue,
-                        title_center, string_format);
+                    gr.DrawString("U.S. Gross National Debt", title_font, Brushes.Blue, title_center, string_format);
                 }
             }
         }
 
+        // Нарисуем объекты в мировой координате графика.
         // Draw things in the graph's world coordinate.
         private void DrawInGraphCoordinates(Graphics gr, int xmin, int xmax, int ymin, int ymax)
         {
             // Define the world coordinate rectangle.
             RectangleF world_rect = new RectangleF(Wxmin, Wymin, Wxmax - Wxmin, Wymax - Wymin);
 
-            // Define the points to which the rectangle's upper left,
-            // upper right, and lower right corners should map.
+            // Определим точки, на которые должны отображаться верхние левые, верхние и нижние правые прямоугольники.
+            // Обратите внимание, что вертикальный флип, поэтому большие значения Y находятся вверху.
+            // Define the points to which the rectangle's upper left, upper right, and lower right corners should map.
             // Note the vertical flip so large Y values are at the top.
             PointF[] window_points =
             {
@@ -130,8 +130,8 @@ namespace howto_draw_graph
             }
         }
 
-        // Draw things that are positioned using the graph's
-        // transformation but that are drawn in pixels.
+        // Рисуйте вещи, которые позиционируются с помощью преобразования графика, но рисуются в пикселях.
+        // Draw things that are positioned using the graph's transformation but that are drawn in pixels.
         private void DrawWithGraphTransformation(Graphics gr, Matrix graph_matrix)
         {
             // Reset to the identity transformation.
@@ -147,10 +147,8 @@ namespace howto_draw_graph
             // Draw the points.
             foreach (PointF pt in TransformedValues)
             {
-                gr.FillEllipse(Brushes.Lime,
-                    pt.X - Radius, pt.Y - Radius, 2 * Radius, 2 * Radius);
-                gr.DrawEllipse(Pens.Black,
-                    pt.X - Radius, pt.Y - Radius, 2 * Radius, 2 * Radius);
+                gr.FillEllipse(Brushes.Lime, pt.X - Radius, pt.Y - Radius, 2 * Radius, 2 * Radius);
+                gr.DrawEllipse(Pens.Black, pt.X - Radius, pt.Y - Radius, 2 * Radius, 2 * Radius);
             }
 
             // Draw the axes.
@@ -163,7 +161,7 @@ namespace howto_draw_graph
                     label_format.LineAlignment = StringAlignment.Center;
 
                     // Draw the axis.
-                    PointF[] y_points = 
+                    PointF[] y_points =
                     {
                         new PointF(Wxmin, Wymin),
                         new PointF(Wxmin, Wymax),
@@ -177,22 +175,18 @@ namespace howto_draw_graph
                         // Tick mark.
                         PointF[] tick_point = { new PointF(Wxmin, y) };
                         graph_matrix.TransformPoints(tick_point);
-                        gr.DrawLine(Pens.Black,
-                            tick_point[0].X, tick_point[0].Y,
-                            tick_point[0].X + 10, tick_point[0].Y);
+                        gr.DrawLine(Pens.Black, tick_point[0].X, tick_point[0].Y, tick_point[0].X + 10, tick_point[0].Y);
 
                         // Label.
                         PointF[] label_point = { new PointF(0, y) };
                         graph_matrix.TransformPoints(label_point);
-                        gr.DrawString(y.ToString("0"), label_font,
-                            Brushes.Black, GraphXmin - 10, label_point[0].Y,
-                            label_format);
+                        gr.DrawString(y.ToString("0"), label_font, Brushes.Black, GraphXmin - 10, label_point[0].Y, label_format);
                     }
                 }
 
                 // Draw the X axis.
                 // Draw the axis.
-                PointF[] x_points = 
+                PointF[] x_points =
                 {
                     new PointF(Wxmin, Wymin),
                     new PointF(Wxmax, Wymin),
@@ -206,16 +200,14 @@ namespace howto_draw_graph
                     // Tick mark.
                     PointF[] tick_point = { new PointF(x, Wymin) };
                     graph_matrix.TransformPoints(tick_point);
-                    gr.DrawLine(Pens.Black,
-                        tick_point[0].X, tick_point[0].Y,
-                        tick_point[0].X, tick_point[0].Y - 10);
+                    gr.DrawLine(Pens.Black, tick_point[0].X, tick_point[0].Y, tick_point[0].X, tick_point[0].Y - 10);
 
                     // Label.
-                    DrawXLabel(gr, x.ToString("0"), label_font,
-                        Brushes.Black, tick_point[0].X, GraphYmax + 10);
+                    DrawXLabel(gr, x.ToString("0"), label_font, Brushes.Black, tick_point[0].X, GraphYmax + 10);
                 }
             }
 
+            // Обозначьте оси.
             // Label the axes.
             using (Font axis_font = new Font("Times New Roman", 14))
             {
@@ -229,8 +221,7 @@ namespace howto_draw_graph
                     float cx = 0;
                     float cy = (GraphYmin + GraphYmax) / 2;
                     gr.TranslateTransform(cx, cy, MatrixOrder.Append);
-                    gr.DrawString("Debt ($ billions)", axis_font,
-                        Brushes.Green, 0, 0, ylabel_format);
+                    gr.DrawString("Debt ($ billions)", axis_font, Brushes.Green, 0, 0, ylabel_format);
                     gr.ResetTransform();
                 }
 
@@ -239,57 +230,54 @@ namespace howto_draw_graph
                 {
                     xlabel_format.Alignment = StringAlignment.Center;
                     xlabel_format.LineAlignment = StringAlignment.Far;
-                    RectangleF xlabel_rect = new RectangleF(
-                        GraphXmin, GraphYmax,
-                        GraphXmax - GraphXmin,
-                        picGraph.ClientSize.Height - GraphYmax);
-                    gr.DrawString("Year", axis_font,
-                        Brushes.Green, xlabel_rect, xlabel_format);
+                    RectangleF xlabel_rect = new RectangleF(GraphXmin, GraphYmax, GraphXmax - GraphXmin, picGraph.ClientSize.Height - GraphYmax);
+                    gr.DrawString("Year", axis_font, Brushes.Green, xlabel_rect, xlabel_format);
                 }
             }
         }
 
+        // Нарисуйте строку, повернутую на 90 градусов в заданном положении.Нарисуйте строку, повернутую на 90 градусов в заданном положении.
         // Draw a string rotated 90 degrees at the given position.
-        private void DrawXLabel(Graphics gr, string txt, Font label_font,
-            Brush label_brush, float x, float y)
+        private void DrawXLabel(Graphics gr, string txt, Font label_font, Brush label_brush, float x, float y)
         {
-            // Transform to center the label's right edge
-            // at the origin when we draw at the origin.
+            // Преобразуйте, чтобы центрировать правый край метки в начале координат, когда мы рисуем в начале координат.
+            // Transform to center the label's right edge at the origin when we draw at the origin.
             gr.ResetTransform();
 
             // Rotate the translated text.
             gr.RotateTransform(90, MatrixOrder.Append);
 
+            // Перевести на конечный пункт назначения.
             // Translate to the final destination.
             gr.TranslateTransform(x, y, MatrixOrder.Append);
 
             // Draw the label.
             using (StringFormat label_format = new StringFormat())
             {
-                // Draw so the text is centered vertically and
-                // left aligned at the origin.
+                // Нарисуйте так, чтобы текст был центрирован по вертикали и левый выровнен в начале координат.
+                // Draw so the text is centered vertically and left aligned at the origin.
                 label_format.Alignment = StringAlignment.Near;
                 label_format.LineAlignment = StringAlignment.Center;
 
+                // Нарисуйте текст в начале координат.
                 // Draw the text at the origin.
                 gr.DrawString(txt, label_font, label_brush, 0, 0, label_format);
             }
-
             gr.ResetTransform();
         }
 
-        // If the mouse is hovering over a data point,
-        // set the PictureBox's tooltip.
+        // Если мышь висит над точкой данных, установите всплывающую подсказку PictureBox.
+        // If the mouse is hovering over a data point, set the PictureBox's tooltip.
         private void picGraph_MouseMove(object sender, MouseEventArgs e)
         {
             if (TransformedValues == null) return;
 
+            // Посмотрите, какую подсказку отображать.
             // See what tool tip to display.
             string tip = "";
             for (int i = 0; i < TransformedValues.Length; i++)
             {
-                if ((Math.Abs(e.X - TransformedValues[i].X) < Radius) &&
-                    (Math.Abs(e.Y - TransformedValues[i].Y) < Radius))
+                if ((Math.Abs(e.X - TransformedValues[i].X) < Radius) && (Math.Abs(e.Y - TransformedValues[i].Y) < Radius))
                 {
                     tip = "$" + Values[i].Y.ToString() + "B";
                     break;
@@ -297,10 +285,8 @@ namespace howto_draw_graph
             }
 
             // Set the new tool tip.
-            if (tipData.GetToolTip(picGraph) != tip)
-            {
-                tipData.SetToolTip(picGraph, tip);
-            }
+            if (tipData.GetToolTip(picGraph) != tip) tipData.SetToolTip(picGraph, tip);
+
         }
     }
 }
