@@ -11,3 +11,7 @@ howto_text_on_circle/bin/
 WindowsFormsApp2/bin/
 howto_draw_graph/bin/
 howto_draw_graph/obj/
+howto_analog_clock/bin/
+howto_analog_clock/obj/Debug/howto_analog_clock.csproj.CoreCompileInputs.cache
+howto_analog_clock/howto_analog_clock.csproj.user
+howto_analog_clock/obj/
